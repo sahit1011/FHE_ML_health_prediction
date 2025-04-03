@@ -82,7 +82,39 @@ def test_single_prediction(sample_data, sample_name):
         encrypted_input = fhe_client.encrypt_data(sample_data)
         end_time_enc = time.time()
         print(f"Encryption Time: {end_time_enc - start_time_enc:.4f} seconds")
-        print(f"Encrypted input type: {type(encrypted_input)}") # Show type, not the data itself
+        print(f"Encrypted input type: {type(encrypted_input)}")
+
+        # Visualize the encrypted data
+        print("\n[Encrypted Data Visualization]")
+        if isinstance(encrypted_input, bytes):
+            # Convert bytes to hex for better visualization
+            hex_data = encrypted_input.hex()
+            total_length = len(hex_data)
+
+            # Print the first 100 characters
+            print(f"First 100 chars of encrypted data (total length: {total_length} chars):")
+            print(hex_data[:100] + "...")
+
+            # Print some statistics about the encrypted data
+            byte_data = encrypted_input
+            print(f"\nEncrypted data size: {len(byte_data)} bytes")
+
+            # Print a simple histogram of byte values
+            byte_counts = {}
+            for b in byte_data[:1000]:  # Analyze first 1000 bytes
+                if b in byte_counts:
+                    byte_counts[b] += 1
+                else:
+                    byte_counts[b] = 1
+
+            print("\nByte distribution (first 1000 bytes):")
+            print("Byte value: frequency")
+            for b, count in sorted(byte_counts.items())[:10]:  # Show top 10
+                print(f"0x{b:02x}: {count}")
+            print("...")
+        else:
+            # If it's not bytes, just print the string representation
+            print(str(encrypted_input)[:200] + "...")
 
         # Get evaluation keys from client
         evaluation_keys = fhe_client.get_evaluation_keys()
@@ -92,6 +124,24 @@ def test_single_prediction(sample_data, sample_name):
         encrypted_prediction = fhe_server.predict(encrypted_input, evaluation_keys)
         end_time_fhe_pred = time.time()
         print(f"FHE Inference Time (on server): {end_time_fhe_pred - start_time_fhe_pred:.4f} seconds")
+
+        # Visualize the encrypted prediction
+        print("\n[Encrypted Prediction Visualization]")
+        if isinstance(encrypted_prediction, bytes):
+            # Convert bytes to hex for better visualization
+            hex_pred = encrypted_prediction.hex()
+            total_length = len(hex_pred)
+
+            # Print the first 100 characters
+            print(f"First 100 chars of encrypted prediction (total length: {total_length} chars):")
+            print(hex_pred[:100] + "...")
+
+            # Print some statistics about the encrypted prediction
+            byte_pred = encrypted_prediction
+            print(f"\nEncrypted prediction size: {len(byte_pred)} bytes")
+        else:
+            # If it's not bytes, just print the string representation
+            print(str(encrypted_prediction)[:200] + "...")
 
         # Client decrypts result
         start_time_dec = time.time()

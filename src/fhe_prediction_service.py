@@ -27,11 +27,36 @@ class FHEServer:
             raise RuntimeError("FHE model is not loaded.")
 
         print("[Server] Received encrypted input. Running FHE prediction...")
+
+        # Print information about the encrypted input
+        if isinstance(encrypted_input, bytes):
+            print(f"[Server] Encrypted input size: {len(encrypted_input)} bytes")
+
+        print("[Server] Step 1: Deserializing encrypted input")
+        print("[Server] The server converts the bytes back to an encrypted tensor format")
+
+        print("[Server] Step 2: Loading evaluation keys")
+        print("[Server] The evaluation keys allow operations on encrypted data without decryption")
+        if isinstance(evaluation_keys, bytes):
+            print(f"[Server] Evaluation keys size: {len(evaluation_keys)} bytes")
+
+        print("[Server] Step 3: Performing homomorphic operations")
+        print("[Server] The server executes the FHE circuit on the encrypted data:")
+        print("  - Homomorphic matrix multiplication (for the linear layer)")
+        print("  - Homomorphic addition (for the bias terms)")
+        print("  - Homomorphic approximation of activation functions")
+        print("[Server] All operations are performed on encrypted data - the server never sees the actual values")
+
         # Use the FHEModelServer to run the prediction on the encrypted data
         # We need both the encrypted input and the evaluation keys from the client
         encrypted_prediction = self.server.run(encrypted_input, evaluation_keys)
 
+        # Print information about the encrypted prediction
+        if isinstance(encrypted_prediction, bytes):
+            print(f"[Server] Encrypted prediction size: {len(encrypted_prediction)} bytes")
+
         print("[Server] FHE prediction complete. Returning encrypted result.")
+        print("[Server] Note: The server has no way to know what the prediction actually is!")
         return encrypted_prediction
 
 # Example usage (for testing the loading)

@@ -36,17 +36,49 @@ class FHEClient:
             data = data.reshape(1, -1)
 
         print(f"[Client] Encrypting data: {data}")
+        print("[Client] Step 1: Quantizing data (converting float to integer)")
+        # The quantization step is handled internally by the client.quantize_encrypt_serialize method
+        # But we can explain what's happening
+        print("[Client] Quantization maps floating-point values to integers using a scale factor")
+        print("[Client] For example, if scale=100, then 0.5 becomes 50, 1.2 becomes 120, etc.")
+
+        print("[Client] Step 2: Encrypting quantized data")
+        print("[Client] Each value is encrypted using the TFHE scheme with the client's secret key")
+        print("[Client] The encryption is probabilistic, so the same value encrypts differently each time")
+
+        print("[Client] Step 3: Serializing encrypted data for transmission")
         # Use the FHEModelClient to quantize, encrypt, and serialize the data
         encrypted_data = self.client.quantize_encrypt_serialize(data)
+
+        # Print some information about the encrypted data
+        if isinstance(encrypted_data, bytes):
+            print(f"[Client] Encrypted data size: {len(encrypted_data)} bytes")
+            print(f"[Client] Original data size: {data.nbytes} bytes")
+            print(f"[Client] Encryption expansion factor: {len(encrypted_data) / data.nbytes:.2f}x")
+
         print("[Client] Data encrypted and serialized.")
         return encrypted_data
 
     def decrypt_result(self, encrypted_result):
         """Decrypts the prediction received from the server."""
         print("[Client] Received encrypted result. Decrypting...")
+
+        print("[Client] Step 1: Deserializing encrypted result")
+        print("[Client] Converting the bytes back to an encrypted tensor format")
+
+        print("[Client] Step 2: Decrypting result using secret key")
+        print("[Client] The secret key is used to remove the encryption layer")
+
+        print("[Client] Step 3: Dequantizing result (converting integer back to float)")
+        print("[Client] The integer values are converted back to floating-point using the scale factor")
+
         # Use the FHEModelClient to deserialize, decrypt, and dequantize the result
         decrypted_result = self.client.deserialize_decrypt_dequantize(encrypted_result)
+
         print(f"[Client] Result decrypted: {decrypted_result}")
+        print(f"[Client] Probabilities: Low Risk = {decrypted_result[0][0]:.4f}, High Risk = {decrypted_result[0][1]:.4f}")
+        print(f"[Client] Predicted class: {'Low Risk (0)' if decrypted_result[0][0] > decrypted_result[0][1] else 'High Risk (1)'}")
+
         return decrypted_result
 
     def get_evaluation_keys(self):
