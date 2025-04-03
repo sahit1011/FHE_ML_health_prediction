@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Error - Secure Health Prediction{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h3 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Error</h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">An error occurred while processing your request:</p>
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-home me-2"></i>Return to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

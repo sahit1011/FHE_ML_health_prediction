@@ -1,0 +1,454 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Results - Secure Health Prediction{% endblock %}
+
+{% block extra_css %}
+<style>
+    .data-flow-arrow {
+        font-size: 2rem;
+        color: #6c757d;
+    }
+    .encrypted-data {
+        font-family: monospace;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-wrap: break-word;
+        font-size: 0.9rem;
+        max-height: 100px;
+        overflow-y: auto;
+    }
+    .risk-indicator {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .risk-low {
+        color: #28a745;
+    }
+    .risk-high {
+        color: #dc3545;
+    }
+    .performance-metric {
+        font-size: 0.9rem;
+    }
+    .comparison-header {
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+    /* Add tooltip for long data arrays */
+    .feature-tooltip {
+        cursor: help;
+        border-bottom: 1px dashed #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <a href="/" class="btn btn-outline-primary mb-4">
+            <i class="fas fa-arrow-left me-2"></i>Back to Input Form
+        </a>
+
+        <h2 class="mb-4"><i class="fas fa-chart-line me-2"></i>Health Risk Prediction Results</h2>
+
+        {% if results.error %}
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i>{{ results.error }}
+        </div>
+        {% endif %}
+
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Your Input Data</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5>Basic Health Metrics</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Age</h5>
+                                <p class="card-text display-6">{{ results.input_data.age }}</p>
+                                <p class="text-muted">years</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">BMI</h5>
+                                <p class="card-text display-6">{{ results.input_data.bmi }}</p>
+                                <p class="text-muted">kg/m²</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Smoking</h5>
+                                <p class="card-text display-6">{% if results.input_data.smoking == 1 %}Yes{% else %}No{% endif %}</p>
+                                <p class="text-muted">status</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Family History</h5>
+                                <p class="card-text display-6">{% if results.input_data.family_history == 1 %}Yes{% else %}No{% endif %}</p>
+                                <p class="text-muted">heart disease</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5>Blood Pressure</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Systolic BP</h5>
+                                <p class="card-text display-6">{{ results.input_data.systolic_bp }}</p>
+                                <p class="text-muted">mmHg</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Diastolic BP</h5>
+                                <p class="card-text display-6">{{ results.input_data.diastolic_bp }}</p>
+                                <p class="text-muted">mmHg</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5>Blood Tests</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Blood Sugar</h5>
+                                <p class="card-text display-6">{{ results.input_data.blood_sugar }}</p>
+                                <p class="text-muted">mg/dL</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Total Cholesterol</h5>
+                                <p class="card-text display-6">{{ results.input_data.total_cholesterol }}</p>
+                                <p class="text-muted">mg/dL</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">HDL</h5>
+                                <p class="card-text display-6">{{ results.input_data.hdl_cholesterol }}</p>
+                                <p class="text-muted">mg/dL</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">LDL</h5>
+                                <p class="card-text display-6">{{ results.input_data.ldl_cholesterol }}</p>
+                                <p class="text-muted">mg/dL</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Traditional ML Approach -->
+            <div class="col-md-6">
+                <div class="card shadow h-100">
+                    <div class="card-header bg-danger text-white">
+                        <h4 class="mb-0"><i class="fas fa-unlock me-2"></i>Traditional ML Approach</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="comparison-header text-center">
+                            <h5><i class="fas fa-exclamation-triangle text-warning me-2"></i>Privacy Risk</h5>
+                            <p class="mb-0">Raw data is exposed to the server</p>
+                        </div>
+
+                        {% if results.plaintext %}
+                        <div class="data-flow mb-4">
+                            <h5>Data Flow:</h5>
+                            <div class="row align-items-center text-center">
+                                <div class="col-md-5">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h6>Client</h6>
+                                            <p class="mb-0"><small>Raw Health Data</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="data-flow-arrow">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h6>Server</h6>
+                                            <p class="mb-0"><small>Can See Your Data</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>Server Receives:</h5>
+                            <div class="encrypted-data">
+                                [{{ results.input_data.age }}, {{ results.input_data.systolic_bp }}, {{ results.input_data.diastolic_bp }}, {{ results.input_data.blood_sugar }}, {{ results.input_data.bmi }}, {{ results.input_data.total_cholesterol }}, {{ results.input_data.hdl_cholesterol }}, {{ results.input_data.ldl_cholesterol }}, {% if results.input_data.smoking == 1 %}1{% else %}0{% endif %}, {% if results.input_data.family_history == 1 %}1{% else %}0{% endif %}]
+                            </div>
+                            <div class="small text-muted mt-1">
+                                <strong>Features:</strong> [Age, Systolic BP, Diastolic BP, Blood Sugar, BMI, Total Cholesterol, HDL, LDL, Smoking, Family History]
+                            </div>
+                            <div class="alert alert-danger mt-2">
+                                <i class="fas fa-eye me-2"></i>Server can see all your sensitive health data!
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>Prediction Result:</h5>
+                            <div class="text-center mb-3">
+                                <div class="risk-indicator {% if results.plaintext.prediction == 0 %}risk-low{% else %}risk-high{% endif %}">
+                                    {% if results.plaintext.prediction == 0 %}
+                                    <i class="fas fa-check-circle me-2"></i>Low Risk
+                                    {% else %}
+                                    <i class="fas fa-exclamation-circle me-2"></i>High Risk
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="progress mb-3" style="height: 30px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ results.plaintext.probabilities[0] * 100 }}%">
+                                    {{ (results.plaintext.probabilities[0] * 100) | round(1) }}% Low Risk
+                                </div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ results.plaintext.probabilities[1] * 100 }}%">
+                                    {{ (results.plaintext.probabilities[1] * 100) | round(1) }}% High Risk
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="performance-metrics">
+                            <h5>Performance:</h5>
+                            <div class="performance-metric">
+                                <i class="fas fa-clock me-2"></i>Inference Time: <strong>{{ results.plaintext.inference_time }} seconds</strong>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Plaintext prediction not available.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- FHE Approach -->
+            <div class="col-md-6">
+                <div class="card shadow h-100">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0"><i class="fas fa-lock me-2"></i>FHE-ML Approach</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="comparison-header text-center">
+                            <h5><i class="fas fa-shield-alt text-success me-2"></i>Privacy Protected</h5>
+                            <p class="mb-0">Data remains encrypted throughout</p>
+                        </div>
+
+                        {% if results.fhe %}
+                        <div class="data-flow mb-4">
+                            <h5>Data Flow:</h5>
+                            <div class="row align-items-center text-center">
+                                <div class="col-md-5">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h6>Client</h6>
+                                            <p class="mb-0"><small>Encrypts Data</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="data-flow-arrow">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h6>Server</h6>
+                                            <p class="mb-0"><small>Only Sees Encrypted Data</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>Server Receives:</h5>
+                            <div class="encrypted-data">
+                                <small>{{ results.fhe.encrypted_sample[:30] }}... (truncated)</small>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-secondary mt-2" data-bs-toggle="modal" data-bs-target="#encryptedDataModal">
+                                <i class="fas fa-eye me-1"></i> View Full Encrypted Data
+                            </button>
+                            <div class="alert alert-success mt-2">
+                                <i class="fas fa-shield-alt me-2"></i>Server cannot see your actual health data!
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>Prediction Result:</h5>
+                            <div class="text-center mb-3">
+                                <div class="risk-indicator {% if results.fhe.prediction == 0 %}risk-low{% else %}risk-high{% endif %}">
+                                    {% if results.fhe.prediction == 0 %}
+                                    <i class="fas fa-check-circle me-2"></i>Low Risk
+                                    {% else %}
+                                    <i class="fas fa-exclamation-circle me-2"></i>High Risk
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="progress mb-3" style="height: 30px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ results.fhe.probabilities[0] * 100 }}%">
+                                    {{ (results.fhe.probabilities[0] * 100) | round(1) }}% Low Risk
+                                </div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ results.fhe.probabilities[1] * 100 }}%">
+                                    {{ (results.fhe.probabilities[1] * 100) | round(1) }}% High Risk
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="performance-metrics">
+                            <h5>Performance:</h5>
+                            <div class="performance-metric">
+                                <i class="fas fa-lock me-2"></i>Encryption Time: <strong>{{ results.fhe.encryption_time }} seconds</strong>
+                            </div>
+                            <div class="performance-metric">
+                                <i class="fas fa-clock me-2"></i>Inference Time: <strong>{{ results.fhe.inference_time }} seconds</strong>
+                            </div>
+                            <div class="performance-metric">
+                                <i class="fas fa-unlock me-2"></i>Decryption Time: <strong>{{ results.fhe.decryption_time }} seconds</strong>
+                            </div>
+                            <div class="performance-metric">
+                                <i class="fas fa-hourglass-end me-2"></i>Total Time: <strong>{{ results.fhe.total_time }} seconds</strong>
+                            </div>
+                        </div>
+                        {% else %}
+                            {% if 'skip_fhe' in request.form %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>FHE prediction was skipped as requested.
+                            </div>
+                            {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>FHE prediction not available.
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if results.plaintext and 'fhe' in results and results.fhe and not 'skip_fhe' in request.form %}
+        <div class="card shadow mt-4">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0"><i class="fas fa-balance-scale me-2"></i>Comparison</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Prediction Accuracy</h5>
+                        <p>
+                            {% if results.plaintext.prediction == results.fhe.prediction %}
+                            <i class="fas fa-check-circle text-success me-2"></i>Both methods produced the <strong>same prediction</strong>!
+                            {% else %}
+                            <i class="fas fa-exclamation-triangle text-warning me-2"></i>The methods produced <strong>different predictions</strong>. This can happen due to quantization in the FHE model.
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Performance Comparison</h5>
+                        <p>
+                            <i class="fas fa-tachometer-alt me-2"></i>FHE is
+                            <strong>{{ ((results.fhe.total_time / results.plaintext.inference_time) | round(1)) }}x slower</strong>
+                            than traditional ML, but provides complete data privacy.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-3">
+                    <h5><i class="fas fa-lightbulb me-2"></i>Key Takeaway</h5>
+                    <p class="mb-0">
+                        FHE allows you to get accurate predictions on your sensitive health data without ever exposing the raw data to the server.
+                        While it's currently slower than traditional ML, the privacy benefits are significant, especially for sensitive medical information.
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add any JavaScript for the results page here
+</script>
+
+<!-- Modal for displaying full encrypted data -->
+{% if results.fhe and results.fhe.encrypted_sample %}
+<div class="modal fade" id="encryptedDataModal" tabindex="-1" aria-labelledby="encryptedDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="encryptedDataModalLabel">
+                    <i class="fas fa-lock me-2"></i>Encrypted Data Sent to Server
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>This is what your encrypted health data looks like when sent to the server. The server cannot extract any meaningful information from this encrypted format.
+                </div>
+                <div class="encrypted-data-full p-3 bg-light" style="font-family: monospace; font-size: 0.8rem; overflow-wrap: break-word; max-height: 300px; overflow-y: auto;">
+                    {{ results.fhe.encrypted_sample }}
+                    <span class="text-muted">... [truncated for display]</span>
+                </div>
+                <div class="mt-2 small text-muted">
+                    <i class="fas fa-info-circle me-1"></i> The complete encrypted data is {{ results.fhe.encrypted_length }} characters long. This is a sample of the first 200 characters.
+                </div>
+                <div class="alert alert-warning mt-3">
+                    <i class="fas fa-shield-alt me-2"></i> This encrypted data contains your health information but is mathematically protected. Even with the most powerful computers, it would take billions of years to decrypt without the proper key.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

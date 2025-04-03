@@ -1,0 +1,63 @@
+/* Custom styles for the Secure Health Prediction app */
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-header {
+    font-weight: 600;
+}
+
+.footer {
+    margin-top: 50px;
+    padding: 20px 0;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Input form styling */
+.form-floating > .form-control {
+    height: calc(3.5rem + 2px);
+    line-height: 1.25;
+}
+
+.form-floating > label {
+    padding: 1rem 0.75rem;
+}
+
+/* Results page styling */
+.risk-indicator {
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.comparison-header {
+    border-left: 5px solid #6c757d;
+}
+
+/* Animations */
+.card {
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .data-flow-arrow {
+        transform: rotate(90deg);
+        margin: 15px 0;
+    }
+}
