@@ -42,15 +42,46 @@
         cursor: help;
         border-bottom: 1px dashed #6c757d;
     }
+    /* Icon wrapper styles */
+    .icon-wrapper {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .icon-wrapper i {
+        font-size: 1.1rem;
+    }
+    /* Table styles */
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,123,255,0.05);
+    }
+    /* Make the table more compact */
+    .table td, .table th {
+        padding: 0.75rem;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="row mb-4">
     <div class="col-md-12">
-        <a href="/" class="btn btn-outline-primary mb-4">
-            <i class="fas fa-arrow-left me-2"></i>Back to Input Form
-        </a>
+        <div class="d-flex mb-4">
+            <a href="/" class="btn btn-outline-primary me-2">
+                <i class="fas fa-arrow-left me-2"></i>Back to Input Form
+            </a>
+            <form action="/view_report" method="post" id="downloadReportForm" class="ms-2 me-2">
+                <input type="hidden" name="results_data" id="results_data">
+                <button type="submit" class="btn btn-success" id="downloadReportBtn">
+                    <i class="fas fa-file-alt me-2"></i>View Report
+                </button>
+            </form>
+            <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#explanationModal">
+                <i class="fas fa-shield-alt me-2"></i>How FHE Works
+            </button>
+        </div>
 
         <h2 class="mb-4"><i class="fas fa-chart-line me-2"></i>Health Risk Prediction Results</h2>
 
@@ -65,110 +96,171 @@
                 <h4 class="mb-0">Your Input Data</h4>
             </div>
             <div class="card-body">
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5>Basic Health Metrics</h5>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-clipboard-list me-2 text-primary"></i>Your Health Data Summary</h5>
                     </div>
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Age</h5>
-                                <p class="card-text display-6">{{ results.input_data.age }}</p>
-                                <p class="text-muted">years</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">BMI</h5>
-                                <p class="card-text display-6">{{ results.input_data.bmi }}</p>
-                                <p class="text-muted">kg/m²</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Smoking</h5>
-                                <p class="card-text display-6">{% if results.input_data.smoking == 1 %}Yes{% else %}No{% endif %}</p>
-                                <p class="text-muted">status</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Family History</h5>
-                                <p class="card-text display-6">{% if results.input_data.family_history == 1 %}Yes{% else %}No{% endif %}</p>
-                                <p class="text-muted">heart disease</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5>Blood Pressure</h5>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Systolic BP</h5>
-                                <p class="card-text display-6">{{ results.input_data.systolic_bp }}</p>
-                                <p class="text-muted">mmHg</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Diastolic BP</h5>
-                                <p class="card-text display-6">{{ results.input_data.diastolic_bp }}</p>
-                                <p class="text-muted">mmHg</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h5>Blood Tests</h5>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Blood Sugar</h5>
-                                <p class="card-text display-6">{{ results.input_data.blood_sugar }}</p>
-                                <p class="text-muted">mg/dL</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Total Cholesterol</h5>
-                                <p class="card-text display-6">{{ results.input_data.total_cholesterol }}</p>
-                                <p class="text-muted">mg/dL</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">HDL</h5>
-                                <p class="card-text display-6">{{ results.input_data.hdl_cholesterol }}</p>
-                                <p class="text-muted">mg/dL</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">LDL</h5>
-                                <p class="card-text display-6">{{ results.input_data.ldl_cholesterol }}</p>
-                                <p class="text-muted">mg/dL</p>
-                            </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th colspan="2">Basic Metrics</th>
+                                        <th colspan="2">Blood Pressure</th>
+                                        <th colspan="4">Blood Tests</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper rounded-circle bg-light p-2 me-2">
+                                                    <i class="fas fa-user text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">Age</div>
+                                                    <div class="fs-5">{{ results.input_data.age }} <small class="text-muted">years</small></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper rounded-circle bg-light p-2 me-2">
+                                                    <i class="fas fa-weight text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">BMI</div>
+                                                    <div class="fs-5">{{ results.input_data.bmi }} <small class="text-muted">kg/m²</small></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper rounded-circle bg-light p-2 me-2">
+                                                    <i class="fas fa-heartbeat text-danger"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">Systolic</div>
+                                                    <div class="fs-5">{{ results.input_data.systolic_bp }} <small class="text-muted">mmHg</small></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper rounded-circle bg-light p-2 me-2">
+                                                    <i class="fas fa-heart text-danger"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">Diastolic</div>
+                                                    <div class="fs-5">{{ results.input_data.diastolic_bp }} <small class="text-muted">mmHg</small></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper rounded-circle bg-light p-2 me-2">
+                                                    <i class="fas fa-tint text-danger"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">Blood Sugar</div>
+                                                    <div class="fs-5">{{ results.input_data.blood_sugar }} <small class="text-muted">mg/dL</small></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper rounded-circle bg-light p-2 me-2">
+                                                    <i class="fas fa-vial text-warning"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">Total Chol</div>
+                                                    <div class="fs-5">{{ results.input_data.total_cholesterol }} <small class="text-muted">mg/dL</small></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper rounded-circle bg-light p-2 me-2">
+                                                    <i class="fas fa-thumbs-up text-success"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">HDL</div>
+                                                    <div class="fs-5">{{ results.input_data.hdl_cholesterol }} <small class="text-muted">mg/dL</small></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper rounded-circle bg-light p-2 me-2">
+                                                    <i class="fas fa-thumbs-down text-danger"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">LDL</div>
+                                                    <div class="fs-5">{{ results.input_data.ldl_cholesterol }} <small class="text-muted">mg/dL</small></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <thead class="table-light">
+                                    <tr>
+                                        <th colspan="4">Risk Factors</th>
+                                        <th colspan="4">Prediction Results</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper rounded-circle bg-light p-2 me-2">
+                                                    <i class="fas fa-smoking {% if results.input_data.smoking == 1 %}text-danger{% else %}text-success{% endif %}"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">Smoking</div>
+                                                    <div class="fs-5">
+                                                        {% if results.input_data.smoking == 1 %}
+                                                            <span class="badge bg-danger">Yes</span>
+                                                        {% else %}
+                                                            <span class="badge bg-success">No</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td colspan="2">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper rounded-circle bg-light p-2 me-2">
+                                                    <i class="fas fa-dna {% if results.input_data.family_history == 1 %}text-danger{% else %}text-success{% endif %}"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">Family History</div>
+                                                    <div class="fs-5">
+                                                        {% if results.input_data.family_history == 1 %}
+                                                            <span class="badge bg-danger">Yes</span>
+                                                        {% else %}
+                                                            <span class="badge bg-success">No</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td colspan="4">
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <div class="text-center">
+                                                    <div class="fw-bold mb-2">Health Risk Assessment</div>
+                                                    <div>
+                                                        {% if results.plaintext.prediction == 0 %}
+                                                            <span class="badge bg-success p-2 fs-6"><i class="fas fa-check-circle me-1"></i> Low Risk ({{ (results.plaintext.probabilities[0] * 100) | round(1) }}%)</span>
+                                                        {% else %}
+                                                            <span class="badge bg-danger p-2 fs-6"><i class="fas fa-exclamation-circle me-1"></i> High Risk ({{ (results.plaintext.probabilities[1] * 100) | round(1) }}%)</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -372,6 +464,260 @@
             </div>
         </div>
 
+        <!-- Health Risk Visualization Section -->
+        <div class="card shadow mt-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Health Risk Analysis</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0"><i class="fas fa-chart-radar me-2 text-primary"></i>Risk Factor Contribution</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="position: relative; height:350px;">
+                                    <canvas id="riskFactorsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Overall Risk Level</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="position: relative; height:250px;">
+                                    <canvas id="riskGaugeChart"></canvas>
+                                </div>
+                                <div class="text-center mt-4">
+                                    <span class="badge bg-success p-2 me-2">Low: 0-30%</span>
+                                    <span class="badge bg-warning p-2 me-2">Moderate: 30-70%</span>
+                                    <span class="badge bg-danger p-2">High: 70-100%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- Personalized Recommendations Section -->
+        <div class="card shadow mt-4">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="fas fa-heartbeat me-2"></i>Personalized Health Recommendations</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info mb-4">
+                    <i class="fas fa-info-circle me-2"></i>Based on your health metrics, we've generated personalized recommendations to help improve your health and reduce risk factors.
+                </div>
+
+                <div id="recommendations-container">
+                    <!-- Recommendations will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- What-If Analysis Section -->
+        <div class="card shadow mt-4">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0"><i class="fas fa-sliders-h me-2"></i>What-If Analysis</h4>
+            </div>
+            <div class="card-body">
+                <p>See how changes to your health metrics could affect your risk prediction:</p>
+
+                <!-- Preset Scenarios -->
+                <div class="mb-4">
+                    <h5 class="mb-3">Quick Scenarios</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-outline-primary" id="scenario-optimal">Optimal Health</button>
+                        <button class="btn btn-outline-primary" id="scenario-quit-smoking" {% if results.input_data.smoking == 0 %}disabled{% endif %}>Quit Smoking</button>
+                        <button class="btn btn-outline-primary" id="scenario-lower-bp">Lower Blood Pressure</button>
+                        <button class="btn btn-outline-primary" id="scenario-lower-cholesterol">Lower Cholesterol</button>
+                        <button class="btn btn-outline-primary" id="scenario-lower-bmi" {% if results.input_data.bmi < 25 %}disabled{% endif %}>Healthy BMI</button>
+                        <button class="btn btn-outline-primary" id="scenario-reset">Reset to Current</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Sliders Column -->
+                    <div class="col-md-6">
+                        <h5 class="mb-3">Adjust Individual Metrics</h5>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="bmi-slider" class="form-label mb-0">BMI</label>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-secondary me-2" id="bmi-original">{{ results.input_data.bmi }}</span>
+                                    <i class="fas fa-arrow-right text-muted mx-2"></i>
+                                    <span class="badge {% if results.input_data.bmi > 25 %}bg-warning{% else %}bg-success{% endif %}" id="bmi-value">{{ results.input_data.bmi }}</span>
+                                </div>
+                            </div>
+                            <input type="range" class="form-range" id="bmi-slider" min="18.5" max="40" step="0.1" value="{{ results.input_data.bmi }}">
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">Underweight</small>
+                                <small class="text-muted">Normal</small>
+                                <small class="text-muted">Overweight</small>
+                                <small class="text-muted">Obese</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="systolic-slider" class="form-label mb-0">Systolic BP (mmHg)</label>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-secondary me-2" id="systolic-original">{{ results.input_data.systolic_bp }}</span>
+                                    <i class="fas fa-arrow-right text-muted mx-2"></i>
+                                    <span class="badge {% if results.input_data.systolic_bp > 120 %}bg-warning{% else %}bg-success{% endif %}" id="systolic-value">{{ results.input_data.systolic_bp }}</span>
+                                </div>
+                            </div>
+                            <input type="range" class="form-range" id="systolic-slider" min="90" max="180" step="1" value="{{ results.input_data.systolic_bp }}">
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">Normal</small>
+                                <small class="text-muted">Elevated</small>
+                                <small class="text-muted">High</small>
+                                <small class="text-muted">Very High</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="diastolic-slider" class="form-label mb-0">Diastolic BP (mmHg)</label>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-secondary me-2" id="diastolic-original">{{ results.input_data.diastolic_bp }}</span>
+                                    <i class="fas fa-arrow-right text-muted mx-2"></i>
+                                    <span class="badge {% if results.input_data.diastolic_bp > 80 %}bg-warning{% else %}bg-success{% endif %}" id="diastolic-value">{{ results.input_data.diastolic_bp }}</span>
+                                </div>
+                            </div>
+                            <input type="range" class="form-range" id="diastolic-slider" min="60" max="110" step="1" value="{{ results.input_data.diastolic_bp }}">
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">Normal</small>
+                                <small class="text-muted">Elevated</small>
+                                <small class="text-muted">High</small>
+                                <small class="text-muted">Very High</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="blood-sugar-slider" class="form-label mb-0">Blood Sugar (mg/dL)</label>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-secondary me-2" id="blood-sugar-original">{{ results.input_data.blood_sugar }}</span>
+                                    <i class="fas fa-arrow-right text-muted mx-2"></i>
+                                    <span class="badge {% if results.input_data.blood_sugar > 100 %}bg-warning{% else %}bg-success{% endif %}" id="blood-sugar-value">{{ results.input_data.blood_sugar }}</span>
+                                </div>
+                            </div>
+                            <input type="range" class="form-range" id="blood-sugar-slider" min="70" max="150" step="1" value="{{ results.input_data.blood_sugar }}">
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">Normal</small>
+                                <small class="text-muted">Prediabetic</small>
+                                <small class="text-muted">Diabetic</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="total-chol-slider" class="form-label mb-0">Total Cholesterol (mg/dL)</label>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-secondary me-2" id="total-chol-original">{{ results.input_data.total_cholesterol }}</span>
+                                    <i class="fas fa-arrow-right text-muted mx-2"></i>
+                                    <span class="badge {% if results.input_data.total_cholesterol > 200 %}bg-warning{% else %}bg-success{% endif %}" id="total-chol-value">{{ results.input_data.total_cholesterol }}</span>
+                                </div>
+                            </div>
+                            <input type="range" class="form-range" id="total-chol-slider" min="120" max="300" step="1" value="{{ results.input_data.total_cholesterol }}">
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">Desirable</small>
+                                <small class="text-muted">Borderline</small>
+                                <small class="text-muted">High</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="hdl-slider" class="form-label mb-0">HDL Cholesterol (mg/dL)</label>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-secondary me-2" id="hdl-original">{{ results.input_data.hdl_cholesterol }}</span>
+                                    <i class="fas fa-arrow-right text-muted mx-2"></i>
+                                    <span class="badge {% if results.input_data.hdl_cholesterol < 40 %}bg-warning{% else %}bg-success{% endif %}" id="hdl-value">{{ results.input_data.hdl_cholesterol }}</span>
+                                </div>
+                            </div>
+                            <input type="range" class="form-range" id="hdl-slider" min="30" max="90" step="1" value="{{ results.input_data.hdl_cholesterol }}">
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">Low</small>
+                                <small class="text-muted">Good</small>
+                                <small class="text-muted">Optimal</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label mb-0">Smoking Status</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="smoking-switch" {% if results.input_data.smoking == 1 %}checked{% endif %}>
+                                    <label class="form-check-label" for="smoking-switch" id="smoking-value">{% if results.input_data.smoking == 1 %}Yes{% else %}No{% endif %}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Column -->
+                    <div class="col-md-6">
+                        <h5 class="mb-3">Impact Analysis</h5>
+
+                        <!-- Risk Comparison Card -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0">Risk Comparison</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-6 text-center">
+                                        <h6>Current Risk</h6>
+                                        <div class="display-6 mb-2 {% if results.plaintext.prediction == 1 %}text-danger{% else %}text-success{% endif %}">
+                                            {{ (results.plaintext.probabilities[1] * 100) | round(1) }}%
+                                        </div>
+                                        <span class="badge {% if results.plaintext.prediction == 1 %}bg-danger{% else %}bg-success{% endif %} p-2">
+                                            {% if results.plaintext.prediction == 1 %}High Risk{% else %}Low Risk{% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="col-6 text-center">
+                                        <h6>Simulated Risk</h6>
+                                        <div class="display-6 mb-2" id="simulated-risk-percentage">-</div>
+                                        <span class="badge bg-secondary p-2" id="simulated-risk-label">Adjust values</span>
+                                    </div>
+                                </div>
+
+                                <!-- Risk Change Indicator -->
+                                <div class="mt-3 text-center" id="risk-change-container" style="display: none;">
+                                    <div class="d-inline-block px-3 py-2 rounded" id="risk-change-indicator">
+                                        <span id="risk-change-icon"></span>
+                                        <span id="risk-change-text"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Impact Breakdown -->
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0">Impact Breakdown</h6>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul class="list-group list-group-flush" id="impact-breakdown">
+                                    <li class="list-group-item text-center text-muted">Adjust values to see impact</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Original Comparison Section -->
         {% if results.plaintext and 'fhe' in results and results.fhe and not 'skip_fhe' in request.form %}
         <div class="card shadow mt-4">
             <div class="card-header bg-info text-white">
@@ -415,8 +761,1001 @@
 
 {% block extra_js %}
 <script>
-    // Add any JavaScript for the results page here
+    document.addEventListener('DOMContentLoaded', function() {
+        // Prepare the results data for the PDF report
+        const resultsData = {{ results|tojson }};
+        document.getElementById('results_data').value = JSON.stringify(resultsData);
+
+        // Set up event handler for the download button
+        document.getElementById('downloadReportBtn').addEventListener('click', function() {
+            // The form will submit automatically, but we could add validation here if needed
+            console.log('Downloading PDF report...');
+        });
+        // Get the input data from the results
+        const inputData = {
+            age: {{ results.input_data.age }},
+            bmi: {{ results.input_data.bmi }},
+            systolicBP: {{ results.input_data.systolic_bp }},
+            diastolicBP: {{ results.input_data.diastolic_bp }},
+            bloodSugar: {{ results.input_data.blood_sugar }},
+            totalCholesterol: {{ results.input_data.total_cholesterol }},
+            hdlCholesterol: {{ results.input_data.hdl_cholesterol }},
+            ldlCholesterol: {{ results.input_data.ldl_cholesterol }},
+            smoking: {{ results.input_data.smoking }},
+            familyHistory: {{ results.input_data.family_history }}
+        };
+
+        // Get the prediction result
+        const prediction = {{ results.plaintext.prediction }};
+        const probabilities = {{ results.plaintext.probabilities|tojson }};
+
+        // Calculate risk factors contribution
+        const riskFactors = calculateRiskFactors(inputData);
+
+        // Create the risk factors radar chart
+        createRiskFactorsChart(riskFactors);
+
+        // Create the risk gauge chart
+        createRiskGaugeChart(probabilities[1]); // High risk probability
+
+        // Health Metrics Comparison chart removed
+
+        // Generate and display personalized recommendations
+        generateRecommendations(inputData, riskFactors);
+
+        // Set up the what-if analysis sliders
+        setupWhatIfAnalysis(inputData, riskFactors);
+    });
+
+    // Function to calculate risk factors contribution
+    function calculateRiskFactors(data) {
+        // These weights are simplified for demonstration
+        // In a real application, these would come from the model
+        const riskFactors = {
+            age: calculateAgeRisk(data.age),
+            bloodPressure: calculateBPRisk(data.systolicBP, data.diastolicBP),
+            bloodSugar: calculateBloodSugarRisk(data.bloodSugar),
+            bmi: calculateBMIRisk(data.bmi),
+            cholesterol: calculateCholesterolRisk(data.totalCholesterol, data.hdlCholesterol, data.ldlCholesterol),
+            smoking: data.smoking ? 0.8 : 0,
+            familyHistory: data.familyHistory ? 0.6 : 0
+        };
+
+        return riskFactors;
+    }
+
+    // Helper functions for risk calculation
+    function calculateAgeRisk(age) {
+        if (age < 30) return 0.1;
+        if (age < 40) return 0.2;
+        if (age < 50) return 0.4;
+        if (age < 60) return 0.6;
+        return 0.8;
+    }
+
+    function calculateBPRisk(systolic, diastolic) {
+        let risk = 0;
+
+        // Systolic BP risk
+        if (systolic >= 140) risk += 0.7;
+        else if (systolic >= 130) risk += 0.5;
+        else if (systolic >= 120) risk += 0.3;
+        else risk += 0.1;
+
+        // Diastolic BP risk
+        if (diastolic >= 90) risk += 0.7;
+        else if (diastolic >= 80) risk += 0.4;
+        else risk += 0.1;
+
+        return risk / 2; // Average of systolic and diastolic risks
+    }
+
+    function calculateBloodSugarRisk(bloodSugar) {
+        if (bloodSugar >= 126) return 0.8; // Diabetes range
+        if (bloodSugar >= 100) return 0.5; // Prediabetes range
+        return 0.1; // Normal range
+    }
+
+    function calculateBMIRisk(bmi) {
+        if (bmi >= 30) return 0.8; // Obese
+        if (bmi >= 25) return 0.5; // Overweight
+        if (bmi >= 18.5) return 0.1; // Normal
+        return 0.3; // Underweight
+    }
+
+    function calculateCholesterolRisk(total, hdl, ldl) {
+        let risk = 0;
+
+        // Total cholesterol risk
+        if (total >= 240) risk += 0.8;
+        else if (total >= 200) risk += 0.5;
+        else risk += 0.1;
+
+        // HDL cholesterol risk (higher is better)
+        if (hdl < 40) risk += 0.8;
+        else if (hdl < 60) risk += 0.4;
+        else risk += 0.1;
+
+        // LDL cholesterol risk
+        if (ldl >= 160) risk += 0.8;
+        else if (ldl >= 130) risk += 0.5;
+        else risk += 0.1;
+
+        return risk / 3; // Average of total, HDL, and LDL risks
+    }
+
+    // Function to create the risk factors radar chart
+    function createRiskFactorsChart(riskFactors) {
+        const ctx = document.getElementById('riskFactorsChart').getContext('2d');
+
+        const riskFactorsChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Age', 'Blood Pressure', 'Blood Sugar', 'BMI', 'Cholesterol', 'Smoking', 'Family History'],
+                datasets: [{
+                    label: 'Risk Factor Contribution',
+                    data: [
+                        riskFactors.age,
+                        riskFactors.bloodPressure,
+                        riskFactors.bloodSugar,
+                        riskFactors.bmi,
+                        riskFactors.cholesterol,
+                        riskFactors.smoking,
+                        riskFactors.familyHistory
+                    ],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    pointBackgroundColor: 'rgb(255, 99, 132)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(255, 99, 132)'
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 1,
+                        pointLabels: {
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            padding: 20 // Add more padding to move labels further out
+                        },
+                        ticks: {
+                            display: false // Hide the radial ticks
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Risk: ${(context.raw * 100).toFixed(0)}%`;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 15,
+                            padding: 15
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Function to create the risk gauge chart
+    function createRiskGaugeChart(riskProbability) {
+        const ctx = document.getElementById('riskGaugeChart').getContext('2d');
+
+        // Convert probability to percentage
+        const riskPercentage = riskProbability * 100;
+
+        // Determine color based on risk level
+        let color = '#28a745'; // Green for low risk
+        if (riskPercentage > 70) {
+            color = '#dc3545'; // Red for high risk
+        } else if (riskPercentage > 30) {
+            color = '#ffc107'; // Yellow for moderate risk
+        }
+
+        // Create a separate div for the risk percentage display
+        const gaugeContainer = document.getElementById('riskGaugeChart').parentNode;
+        const riskDisplay = document.createElement('div');
+        riskDisplay.className = 'risk-percentage-display text-center';
+        riskDisplay.style.marginTop = '-120px'; // Position it in the middle of the gauge
+        riskDisplay.style.marginBottom = '80px'; // Add space below
+        riskDisplay.style.position = 'relative'; // Ensure proper positioning
+        riskDisplay.style.zIndex = '10'; // Ensure it's above the chart
+        riskDisplay.innerHTML = `
+            <div style="font-size: 28px; font-weight: bold; color: ${color};">${riskPercentage.toFixed(1)}%</div>
+            <div class="fw-bold" style="font-size: 16px; color: #6c757d;">Risk Level</div>
+        `;
+
+        // Insert the risk display after the canvas
+        gaugeContainer.appendChild(riskDisplay);
+
+        const gaugeChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [riskPercentage, 100 - riskPercentage],
+                    backgroundColor: [color, '#e9ecef'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                circumference: 180,
+                rotation: -90,
+                cutout: '70%',
+                plugins: {
+                    tooltip: { enabled: false },
+                    legend: { display: false }
+                },
+                maintainAspectRatio: false
+            }
+        });
+    }
+
+    // Health Metrics Comparison chart function removed
+
+    // Function to generate personalized recommendations
+    function generateRecommendations(data, riskFactors) {
+        const recommendationsContainer = document.getElementById('recommendations-container');
+        const recommendations = [];
+
+        // BMI recommendations
+        if (data.bmi >= 30) {
+            recommendations.push({
+                title: 'Reduce BMI to a Healthier Range',
+                description: 'Your BMI indicates obesity, which increases risk for heart disease, diabetes, and other conditions.',
+                actions: [
+                    'Aim to lose weight gradually (1-2 pounds per week)',
+                    'Increase physical activity to at least 150 minutes per week',
+                    'Focus on a balanced diet rich in fruits, vegetables, and lean proteins',
+                    'Consider consulting with a dietitian for a personalized meal plan'
+                ],
+                priority: 'high'
+            });
+        } else if (data.bmi >= 25) {
+            recommendations.push({
+                title: 'Work Toward a Healthier Weight',
+                description: 'Your BMI indicates you are overweight, which can increase health risks.',
+                actions: [
+                    'Aim for 30 minutes of moderate exercise most days',
+                    'Focus on portion control and mindful eating',
+                    'Reduce intake of processed foods and added sugars'
+                ],
+                priority: 'medium'
+            });
+        }
+
+        // Blood pressure recommendations
+        if (data.systolicBP >= 140 || data.diastolicBP >= 90) {
+            recommendations.push({
+                title: 'Lower Your Blood Pressure',
+                description: 'Your blood pressure is in the hypertension range, which increases risk for heart disease and stroke.',
+                actions: [
+                    'Reduce sodium intake to less than 2,300mg per day',
+                    'Increase physical activity',
+                    'Maintain a healthy weight',
+                    'Limit alcohol consumption',
+                    'Consider the DASH diet (Dietary Approaches to Stop Hypertension)',
+                    'Consult with your doctor about medication options'
+                ],
+                priority: 'high'
+            });
+        } else if (data.systolicBP >= 120 || data.diastolicBP >= 80) {
+            recommendations.push({
+                title: 'Monitor Your Blood Pressure',
+                description: 'Your blood pressure is elevated, which may lead to hypertension if not addressed.',
+                actions: [
+                    'Reduce sodium intake',
+                    'Exercise regularly',
+                    'Manage stress through meditation or other relaxation techniques',
+                    'Monitor your blood pressure regularly'
+                ],
+                priority: 'medium'
+            });
+        }
+
+        // Blood sugar recommendations
+        if (data.bloodSugar >= 126) {
+            recommendations.push({
+                title: 'Manage Your Blood Sugar',
+                description: 'Your blood sugar is in the diabetes range, which requires careful management.',
+                actions: [
+                    'Consult with your doctor for proper diagnosis and treatment',
+                    'Monitor your blood sugar regularly',
+                    'Follow a balanced diet low in simple carbohydrates',
+                    'Engage in regular physical activity',
+                    'Take medications as prescribed'
+                ],
+                priority: 'high'
+            });
+        } else if (data.bloodSugar >= 100) {
+            recommendations.push({
+                title: 'Improve Blood Sugar Control',
+                description: 'Your blood sugar is in the prediabetes range, which increases risk for developing diabetes.',
+                actions: [
+                    'Reduce intake of refined carbohydrates and added sugars',
+                    'Increase fiber intake',
+                    'Aim for 150 minutes of moderate exercise per week',
+                    'Lose 5-7% of body weight if overweight'
+                ],
+                priority: 'medium'
+            });
+        }
+
+        // Cholesterol recommendations
+        if (data.totalCholesterol >= 240 || data.ldlCholesterol >= 160 || data.hdlCholesterol < 40) {
+            recommendations.push({
+                title: 'Improve Your Cholesterol Profile',
+                description: 'Your cholesterol levels indicate increased risk for heart disease and stroke.',
+                actions: [
+                    'Reduce saturated and trans fats in your diet',
+                    'Increase intake of omega-3 fatty acids (fish, walnuts, flaxseeds)',
+                    'Increase soluble fiber (oats, beans, fruits)',
+                    'Exercise regularly',
+                    'Consider plant sterols/stanols',
+                    'Consult with your doctor about medication options'
+                ],
+                priority: 'high'
+            });
+        } else if (data.totalCholesterol >= 200 || data.ldlCholesterol >= 130 || data.hdlCholesterol < 60) {
+            recommendations.push({
+                title: 'Monitor Your Cholesterol',
+                description: 'Your cholesterol levels are borderline and should be monitored.',
+                actions: [
+                    'Limit saturated fats',
+                    'Increase physical activity',
+                    'Include heart-healthy foods like nuts, avocados, and olive oil',
+                    'Get regular cholesterol screenings'
+                ],
+                priority: 'medium'
+            });
+        }
+
+        // Smoking recommendations
+        if (data.smoking) {
+            recommendations.push({
+                title: 'Quit Smoking',
+                description: 'Smoking significantly increases your risk for heart disease, stroke, cancer, and many other health problems.',
+                actions: [
+                    'Talk to your doctor about smoking cessation programs',
+                    'Consider nicotine replacement therapy or medications',
+                    'Join a support group',
+                    'Avoid triggers and find healthy alternatives to manage cravings',
+                    'Set a quit date and stick to it'
+                ],
+                priority: 'high'
+            });
+        }
+
+        // Family history recommendations
+        if (data.familyHistory) {
+            recommendations.push({
+                title: 'Address Family History Risk',
+                description: 'Your family history of heart disease increases your risk, but you can take steps to mitigate it.',
+                actions: [
+                    'Get regular check-ups and screenings',
+                    'Be vigilant about managing all other risk factors',
+                    'Discuss your family history with your doctor',
+                    'Consider genetic counseling if recommended'
+                ],
+                priority: 'medium'
+            });
+        }
+
+        // General recommendations for everyone
+        recommendations.push({
+            title: 'Maintain a Heart-Healthy Lifestyle',
+            description: 'These general recommendations can help everyone maintain better cardiovascular health.',
+            actions: [
+                'Eat a diet rich in fruits, vegetables, whole grains, and lean proteins',
+                'Aim for at least 150 minutes of moderate exercise per week',
+                'Manage stress through mindfulness, meditation, or other techniques',
+                'Get 7-9 hours of quality sleep each night',
+                'Stay hydrated by drinking plenty of water',
+                'Limit alcohol consumption'
+            ],
+            priority: 'low'
+        });
+
+        // Sort recommendations by priority
+        recommendations.sort((a, b) => {
+            const priorityOrder = { 'high': 0, 'medium': 1, 'low': 2 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+
+        // Create HTML for recommendations
+        let recommendationsHTML = '';
+
+        recommendations.forEach((rec, index) => {
+            const priorityClass = rec.priority === 'high' ? 'danger' :
+                                rec.priority === 'medium' ? 'warning' : 'success';
+
+            recommendationsHTML += `
+                <div class="card mb-3 border-${priorityClass}">
+                    <div class="card-header bg-${priorityClass} text-white">
+                        <h5 class="mb-0">
+                            <span class="badge bg-light text-${priorityClass} me-2">${index + 1}</span>
+                            ${rec.title}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p>${rec.description}</p>
+                        <h6>Recommended Actions:</h6>
+                        <ul class="mb-0">
+                            ${rec.actions.map(action => `<li>${action}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        });
+
+        recommendationsContainer.innerHTML = recommendationsHTML;
+    }
+
+    // Function to set up the what-if analysis
+    function setupWhatIfAnalysis(initialData, initialRiskFactors) {
+        // Clone the initial data for manipulation
+        let currentData = {...initialData};
+        const originalData = {...initialData};
+
+        // Get all slider elements and their value displays
+        const bmiSlider = document.getElementById('bmi-slider');
+        const bmiValue = document.getElementById('bmi-value');
+        const bmiOriginal = document.getElementById('bmi-original');
+
+        const systolicSlider = document.getElementById('systolic-slider');
+        const systolicValue = document.getElementById('systolic-value');
+        const systolicOriginal = document.getElementById('systolic-original');
+
+        const diastolicSlider = document.getElementById('diastolic-slider');
+        const diastolicValue = document.getElementById('diastolic-value');
+        const diastolicOriginal = document.getElementById('diastolic-original');
+
+        const bloodSugarSlider = document.getElementById('blood-sugar-slider');
+        const bloodSugarValue = document.getElementById('blood-sugar-value');
+        const bloodSugarOriginal = document.getElementById('blood-sugar-original');
+
+        const totalCholSlider = document.getElementById('total-chol-slider');
+        const totalCholValue = document.getElementById('total-chol-value');
+        const totalCholOriginal = document.getElementById('total-chol-original');
+
+        const hdlSlider = document.getElementById('hdl-slider');
+        const hdlValue = document.getElementById('hdl-value');
+        const hdlOriginal = document.getElementById('hdl-original');
+
+        const smokingSwitch = document.getElementById('smoking-switch');
+        const smokingValue = document.getElementById('smoking-value');
+
+        // Get the result display elements
+        const simulatedRiskPercentage = document.getElementById('simulated-risk-percentage');
+        const simulatedRiskLabel = document.getElementById('simulated-risk-label');
+        const riskChangeContainer = document.getElementById('risk-change-container');
+        const riskChangeIndicator = document.getElementById('risk-change-indicator');
+        const riskChangeIcon = document.getElementById('risk-change-icon');
+        const riskChangeText = document.getElementById('risk-change-text');
+        const impactBreakdown = document.getElementById('impact-breakdown');
+
+        // Get the scenario buttons
+        const scenarioOptimal = document.getElementById('scenario-optimal');
+        const scenarioQuitSmoking = document.getElementById('scenario-quit-smoking');
+        const scenarioLowerBP = document.getElementById('scenario-lower-bp');
+        const scenarioLowerCholesterol = document.getElementById('scenario-lower-cholesterol');
+        const scenarioLowerBMI = document.getElementById('scenario-lower-bmi');
+        const scenarioReset = document.getElementById('scenario-reset');
+
+        // Original risk calculation
+        const originalRiskFactorValues = Object.values(initialRiskFactors);
+        const originalAvgRisk = originalRiskFactorValues.reduce((sum, val) => sum + val, 0) / originalRiskFactorValues.length;
+        const originalRiskPercentage = (originalAvgRisk * 100).toFixed(1);
+
+        // Function to update the badge color based on value
+        function updateBadgeColor(element, value, thresholds) {
+            element.classList.remove('bg-success', 'bg-warning', 'bg-danger');
+
+            if (thresholds.high && value >= thresholds.high) {
+                element.classList.add('bg-danger');
+            } else if (thresholds.medium && value >= thresholds.medium) {
+                element.classList.add('bg-warning');
+            } else {
+                element.classList.add('bg-success');
+            }
+        }
+
+        // Function to update the simulated risk
+        function updateSimulatedRisk() {
+            // Update the current data with slider values
+            currentData.bmi = parseFloat(bmiSlider.value);
+            currentData.systolicBP = parseFloat(systolicSlider.value);
+            currentData.diastolicBP = parseFloat(diastolicSlider.value);
+            currentData.bloodSugar = parseFloat(bloodSugarSlider.value);
+            currentData.totalCholesterol = parseFloat(totalCholSlider.value);
+            currentData.hdlCholesterol = parseFloat(hdlSlider.value);
+            currentData.smoking = smokingSwitch.checked ? 1 : 0;
+
+            // Update badge colors
+            updateBadgeColor(bmiValue, currentData.bmi, {medium: 25, high: 30});
+            updateBadgeColor(systolicValue, currentData.systolicBP, {medium: 120, high: 140});
+            updateBadgeColor(diastolicValue, currentData.diastolicBP, {medium: 80, high: 90});
+            updateBadgeColor(bloodSugarValue, currentData.bloodSugar, {medium: 100, high: 126});
+            updateBadgeColor(totalCholValue, currentData.totalCholesterol, {medium: 200, high: 240});
+            // For HDL, higher is better, so we invert the logic
+            updateBadgeColor(hdlValue, currentData.hdlCholesterol, {medium: 60, high: 999});
+            if (currentData.hdlCholesterol < 40) {
+                hdlValue.classList.remove('bg-success', 'bg-warning');
+                hdlValue.classList.add('bg-danger');
+            }
+
+            // Recalculate risk factors
+            const newRiskFactors = calculateRiskFactors(currentData);
+
+            // Calculate overall risk (simplified formula for demonstration)
+            const riskFactorValues = Object.values(newRiskFactors);
+            const avgRisk = riskFactorValues.reduce((sum, val) => sum + val, 0) / riskFactorValues.length;
+
+            // Convert to percentage
+            const riskPercentage = (avgRisk * 100).toFixed(1);
+
+            // Determine risk level
+            let riskLevel, riskClass;
+            if (avgRisk < 0.3) {
+                riskLevel = 'Low Risk';
+                riskClass = 'success';
+            } else if (avgRisk < 0.7) {
+                riskLevel = 'Moderate Risk';
+                riskClass = 'warning';
+            } else {
+                riskLevel = 'High Risk';
+                riskClass = 'danger';
+            }
+
+            // Update the simulated risk display
+            simulatedRiskPercentage.textContent = `${riskPercentage}%`;
+            simulatedRiskPercentage.className = `display-6 mb-2 text-${riskClass}`;
+
+            simulatedRiskLabel.textContent = riskLevel;
+            simulatedRiskLabel.className = `badge bg-${riskClass} p-2`;
+
+            // Calculate risk change
+            const riskChange = (avgRisk - originalAvgRisk) * 100;
+            const riskChangeFormatted = riskChange.toFixed(1);
+
+            // Show risk change indicator
+            riskChangeContainer.style.display = 'block';
+
+            if (riskChange < -0.1) {
+                // Risk decreased
+                riskChangeIndicator.className = 'd-inline-block px-3 py-2 rounded bg-success text-white';
+                riskChangeIcon.innerHTML = '<i class="fas fa-arrow-down me-2"></i>';
+                riskChangeText.textContent = `${Math.abs(riskChangeFormatted)}% lower risk than your current values`;
+            } else if (riskChange > 0.1) {
+                // Risk increased
+                riskChangeIndicator.className = 'd-inline-block px-3 py-2 rounded bg-danger text-white';
+                riskChangeIcon.innerHTML = '<i class="fas fa-arrow-up me-2"></i>';
+                riskChangeText.textContent = `${riskChangeFormatted}% higher risk than your current values`;
+            } else {
+                // No significant change
+                riskChangeIndicator.className = 'd-inline-block px-3 py-2 rounded bg-secondary text-white';
+                riskChangeIcon.innerHTML = '<i class="fas fa-equals me-2"></i>';
+                riskChangeText.textContent = 'No significant change in risk';
+            }
+
+            // Generate impact breakdown
+            generateImpactBreakdown(originalData, currentData, newRiskFactors, initialRiskFactors);
+        }
+
+        // Function to generate impact breakdown
+        function generateImpactBreakdown(originalData, currentData, currentRiskFactors, originalRiskFactors) {
+            // Clear previous breakdown
+            impactBreakdown.innerHTML = '';
+
+            // Calculate impact of each factor
+            const impacts = [];
+
+            // BMI impact
+            if (currentData.bmi !== originalData.bmi) {
+                const change = currentData.bmi - originalData.bmi;
+                const riskChange = currentRiskFactors.bmi - originalRiskFactors.bmi;
+                impacts.push({
+                    factor: 'BMI',
+                    original: originalData.bmi,
+                    current: currentData.bmi,
+                    change: change,
+                    riskChange: riskChange,
+                    icon: change < 0 ? 'fa-weight-scale' : 'fa-weight',
+                    message: change < 0 ? 'Decreased BMI reduces cardiovascular risk' : 'Increased BMI raises cardiovascular risk'
+                });
+            }
+
+            // Blood pressure impact
+            const systolicChange = currentData.systolicBP - originalData.systolicBP;
+            const diastolicChange = currentData.diastolicBP - originalData.diastolicBP;
+            if (systolicChange !== 0 || diastolicChange !== 0) {
+                impacts.push({
+                    factor: 'Blood Pressure',
+                    original: `${originalData.systolicBP}/${originalData.diastolicBP}`,
+                    current: `${currentData.systolicBP}/${currentData.diastolicBP}`,
+                    change: (systolicChange + diastolicChange) / 2, // Average change
+                    riskChange: currentRiskFactors.bloodPressure - originalRiskFactors.bloodPressure,
+                    icon: 'fa-heart-pulse',
+                    message: systolicChange < 0 ? 'Lower blood pressure reduces strain on your heart' : 'Higher blood pressure increases strain on your heart'
+                });
+            }
+
+            // Blood sugar impact
+            if (currentData.bloodSugar !== originalData.bloodSugar) {
+                const change = currentData.bloodSugar - originalData.bloodSugar;
+                impacts.push({
+                    factor: 'Blood Sugar',
+                    original: originalData.bloodSugar,
+                    current: currentData.bloodSugar,
+                    change: change,
+                    riskChange: currentRiskFactors.bloodSugar - originalRiskFactors.bloodSugar,
+                    icon: 'fa-droplet',
+                    message: change < 0 ? 'Lower blood sugar reduces diabetes risk' : 'Higher blood sugar increases diabetes risk'
+                });
+            }
+
+            // Cholesterol impact
+            const totalCholChange = currentData.totalCholesterol - originalData.totalCholesterol;
+            const hdlChange = currentData.hdlCholesterol - originalData.hdlCholesterol;
+            if (totalCholChange !== 0 || hdlChange !== 0) {
+                impacts.push({
+                    factor: 'Cholesterol',
+                    original: `Total: ${originalData.totalCholesterol}, HDL: ${originalData.hdlCholesterol}`,
+                    current: `Total: ${currentData.totalCholesterol}, HDL: ${currentData.hdlCholesterol}`,
+                    change: totalCholChange - hdlChange, // For HDL, higher is better, so we subtract
+                    riskChange: currentRiskFactors.cholesterol - originalRiskFactors.cholesterol,
+                    icon: 'fa-vial',
+                    message: totalCholChange < 0 ? 'Lower total cholesterol improves heart health' : 'Higher total cholesterol increases heart disease risk'
+                });
+            }
+
+            // Smoking impact
+            if (currentData.smoking !== originalData.smoking) {
+                impacts.push({
+                    factor: 'Smoking',
+                    original: originalData.smoking ? 'Yes' : 'No',
+                    current: currentData.smoking ? 'Yes' : 'No',
+                    change: currentData.smoking - originalData.smoking,
+                    riskChange: currentRiskFactors.smoking - originalRiskFactors.smoking,
+                    icon: 'fa-smoking',
+                    message: currentData.smoking < originalData.smoking ? 'Quitting smoking significantly reduces heart disease risk' : 'Starting smoking significantly increases heart disease risk'
+                });
+            }
+
+            // Sort impacts by absolute risk change
+            impacts.sort((a, b) => Math.abs(b.riskChange) - Math.abs(a.riskChange));
+
+            // Generate HTML for each impact
+            if (impacts.length === 0) {
+                impactBreakdown.innerHTML = '<li class="list-group-item text-center text-muted">No changes made to health metrics</li>';
+            } else {
+                impacts.forEach(impact => {
+                    const riskChangePercent = (impact.riskChange * 100).toFixed(1);
+                    const isPositive = impact.riskChange < 0;
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+
+                    listItem.innerHTML = `
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <i class="fas ${impact.icon} fa-2x ${isPositive ? 'text-success' : 'text-danger'}"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">${impact.factor}: ${impact.original} → ${impact.current}</h6>
+                                <p class="mb-0 small">${impact.message}</p>
+                            </div>
+                            <div class="ms-3 text-end">
+                                <span class="badge ${isPositive ? 'bg-success' : 'bg-danger'} p-2">
+                                    ${isPositive ? '-' : '+'} ${Math.abs(riskChangePercent)}% risk
+                                </span>
+                            </div>
+                        </div>
+                    `;
+
+                    impactBreakdown.appendChild(listItem);
+                });
+            }
+        }
+
+        // Set up event listeners for all sliders
+        bmiSlider.addEventListener('input', function() {
+            bmiValue.textContent = this.value;
+            updateSimulatedRisk();
+        });
+
+        systolicSlider.addEventListener('input', function() {
+            systolicValue.textContent = this.value;
+            updateSimulatedRisk();
+        });
+
+        diastolicSlider.addEventListener('input', function() {
+            diastolicValue.textContent = this.value;
+            updateSimulatedRisk();
+        });
+
+        bloodSugarSlider.addEventListener('input', function() {
+            bloodSugarValue.textContent = this.value;
+            updateSimulatedRisk();
+        });
+
+        totalCholSlider.addEventListener('input', function() {
+            totalCholValue.textContent = this.value;
+            updateSimulatedRisk();
+        });
+
+        hdlSlider.addEventListener('input', function() {
+            hdlValue.textContent = this.value;
+            updateSimulatedRisk();
+        });
+
+        smokingSwitch.addEventListener('change', function() {
+            smokingValue.textContent = this.checked ? 'Yes' : 'No';
+            updateSimulatedRisk();
+        });
+
+        // Set up event listeners for scenario buttons
+        scenarioOptimal.addEventListener('click', function() {
+            // Set all values to optimal
+            bmiSlider.value = 22.5; // Healthy BMI
+            bmiValue.textContent = bmiSlider.value;
+
+            systolicSlider.value = 110; // Optimal systolic
+            systolicValue.textContent = systolicSlider.value;
+
+            diastolicSlider.value = 70; // Optimal diastolic
+            diastolicValue.textContent = diastolicSlider.value;
+
+            bloodSugarSlider.value = 85; // Optimal blood sugar
+            bloodSugarValue.textContent = bloodSugarSlider.value;
+
+            totalCholSlider.value = 170; // Optimal total cholesterol
+            totalCholValue.textContent = totalCholSlider.value;
+
+            hdlSlider.value = 60; // Optimal HDL
+            hdlValue.textContent = hdlSlider.value;
+
+            smokingSwitch.checked = false; // No smoking
+            smokingValue.textContent = 'No';
+
+            updateSimulatedRisk();
+        });
+
+        scenarioQuitSmoking.addEventListener('click', function() {
+            if (originalData.smoking) {
+                smokingSwitch.checked = false;
+                smokingValue.textContent = 'No';
+                updateSimulatedRisk();
+            }
+        });
+
+        scenarioLowerBP.addEventListener('click', function() {
+            // Lower blood pressure by 10% or to optimal, whichever is higher
+            const targetSystolic = Math.max(110, Math.round(originalData.systolicBP * 0.9));
+            const targetDiastolic = Math.max(70, Math.round(originalData.diastolicBP * 0.9));
+
+            systolicSlider.value = targetSystolic;
+            systolicValue.textContent = targetSystolic;
+
+            diastolicSlider.value = targetDiastolic;
+            diastolicValue.textContent = targetDiastolic;
+
+            updateSimulatedRisk();
+        });
+
+        scenarioLowerCholesterol.addEventListener('click', function() {
+            // Lower total cholesterol by 15% and increase HDL by 10%
+            const targetTotalChol = Math.max(150, Math.round(originalData.totalCholesterol * 0.85));
+            const targetHDL = Math.min(90, Math.round(originalData.hdlCholesterol * 1.1));
+
+            totalCholSlider.value = targetTotalChol;
+            totalCholValue.textContent = targetTotalChol;
+
+            hdlSlider.value = targetHDL;
+            hdlValue.textContent = targetHDL;
+
+            updateSimulatedRisk();
+        });
+
+        scenarioLowerBMI.addEventListener('click', function() {
+            if (originalData.bmi > 25) {
+                // Lower BMI to 24.9 or by 10%, whichever is higher
+                const targetBMI = Math.max(24.9, originalData.bmi * 0.9).toFixed(1);
+
+                bmiSlider.value = targetBMI;
+                bmiValue.textContent = targetBMI;
+
+                updateSimulatedRisk();
+            }
+        });
+
+        scenarioReset.addEventListener('click', function() {
+            // Reset all values to original
+            bmiSlider.value = originalData.bmi;
+            bmiValue.textContent = originalData.bmi;
+
+            systolicSlider.value = originalData.systolicBP;
+            systolicValue.textContent = originalData.systolicBP;
+
+            diastolicSlider.value = originalData.diastolicBP;
+            diastolicValue.textContent = originalData.diastolicBP;
+
+            bloodSugarSlider.value = originalData.bloodSugar;
+            bloodSugarValue.textContent = originalData.bloodSugar;
+
+            totalCholSlider.value = originalData.totalCholesterol;
+            totalCholValue.textContent = originalData.totalCholesterol;
+
+            hdlSlider.value = originalData.hdlCholesterol;
+            hdlValue.textContent = originalData.hdlCholesterol;
+
+            smokingSwitch.checked = originalData.smoking === 1;
+            smokingValue.textContent = originalData.smoking === 1 ? 'Yes' : 'No';
+
+            // Reset badge colors
+            updateBadgeColor(bmiValue, originalData.bmi, {medium: 25, high: 30});
+            updateBadgeColor(systolicValue, originalData.systolicBP, {medium: 120, high: 140});
+            updateBadgeColor(diastolicValue, originalData.diastolicBP, {medium: 80, high: 90});
+            updateBadgeColor(bloodSugarValue, originalData.bloodSugar, {medium: 100, high: 126});
+            updateBadgeColor(totalCholValue, originalData.totalCholesterol, {medium: 200, high: 240});
+            updateBadgeColor(hdlValue, originalData.hdlCholesterol, {medium: 60, high: 999});
+            if (originalData.hdlCholesterol < 40) {
+                hdlValue.classList.remove('bg-success', 'bg-warning');
+                hdlValue.classList.add('bg-danger');
+            }
+
+            // Reset risk display
+            simulatedRiskPercentage.textContent = originalRiskPercentage + '%';
+            simulatedRiskPercentage.className = 'display-6 mb-2';
+            if (originalAvgRisk < 0.3) {
+                simulatedRiskPercentage.classList.add('text-success');
+                simulatedRiskLabel.className = 'badge bg-success p-2';
+                simulatedRiskLabel.textContent = 'Low Risk';
+            } else if (originalAvgRisk < 0.7) {
+                simulatedRiskPercentage.classList.add('text-warning');
+                simulatedRiskLabel.className = 'badge bg-warning p-2';
+                simulatedRiskLabel.textContent = 'Moderate Risk';
+            } else {
+                simulatedRiskPercentage.classList.add('text-danger');
+                simulatedRiskLabel.className = 'badge bg-danger p-2';
+                simulatedRiskLabel.textContent = 'High Risk';
+            }
+
+            // Hide risk change indicator
+            riskChangeContainer.style.display = 'none';
+
+            // Clear impact breakdown
+            impactBreakdown.innerHTML = '<li class="list-group-item text-center text-muted">Adjust values to see impact</li>';
+        });
+
+        // Initialize with current values
+        updateSimulatedRisk();
+    }
 </script>
+
+<!-- Modal for explaining how FHE works -->
+<div class="modal fade" id="explanationModal" tabindex="-1" aria-labelledby="explanationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="explanationModalLabel">
+                    <i class="fas fa-shield-alt me-2"></i>How Fully Homomorphic Encryption Works
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h5 class="mb-3">What is Fully Homomorphic Encryption (FHE)?</h5>
+                        <p>
+                            Fully Homomorphic Encryption (FHE) is a revolutionary encryption technology that allows computations to be performed directly on encrypted data without ever decrypting it.
+                        </p>
+                        <div class="alert alert-info">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="fas fa-lightbulb fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h6 class="alert-heading">Think of it like a locked box</h6>
+                                    <p class="mb-0">
+                                        Imagine placing your health data in a special locked box. You keep the only key. The box has magical properties that allow others to perform calculations on what's inside without ever opening the box or seeing its contents. When the calculations are complete, only you can unlock the box to see the results.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h5 class="mb-3">How Our FHE Health Prediction Works</h5>
+                        <div class="card bg-light mb-3">
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col">
+                                        <div class="p-3 rounded bg-white shadow-sm mb-2">
+                                            <i class="fas fa-user-lock fa-2x text-primary mb-2"></i>
+                                            <h6>Step 1: Encryption</h6>
+                                        </div>
+                                        <p class="small">Your health data is encrypted on your device using your unique encryption key</p>
+                                    </div>
+                                    <div class="col-auto d-flex align-items-center">
+                                        <i class="fas fa-arrow-right text-muted"></i>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-3 rounded bg-white shadow-sm mb-2">
+                                            <i class="fas fa-server fa-2x text-primary mb-2"></i>
+                                            <h6>Step 2: Encrypted Processing</h6>
+                                        </div>
+                                        <p class="small">The server processes your encrypted data using FHE techniques</p>
+                                    </div>
+                                    <div class="col-auto d-flex align-items-center">
+                                        <i class="fas fa-arrow-right text-muted"></i>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-3 rounded bg-white shadow-sm mb-2">
+                                            <i class="fas fa-lock-open fa-2x text-primary mb-2"></i>
+                                            <h6>Step 3: Decryption</h6>
+                                        </div>
+                                        <p class="small">Encrypted results are sent back and decrypted only on your device</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="mb-3">Benefits of FHE for Health Predictions</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="fas fa-user-shield fa-2x text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Enhanced Privacy</h6>
+                                        <p class="small mb-0">Your sensitive health data remains private at all times, even during processing.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="fas fa-lock fa-2x text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Breach Protection</h6>
+                                        <p class="small mb-0">Even if the server is compromised, your health data remains encrypted and secure.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="/fhe-privacy" class="btn btn-primary me-auto">
+                    <i class="fas fa-shield-alt me-1"></i>Learn More About FHE Privacy
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal for displaying full encrypted data -->
 {% if results.fhe and results.fhe.encrypted_sample %}

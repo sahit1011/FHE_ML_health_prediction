@@ -1,0 +1,330 @@
+{% extends 'base.html' %}
+
+{% block title %}How FHE Protects Your Privacy{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1 class="display-4 mb-4">How Fully Homomorphic Encryption (FHE) Protects Your Privacy</h1>
+            <p class="lead">
+                Our health prediction service uses cutting-edge Fully Homomorphic Encryption (FHE) technology to ensure your sensitive health data remains private while still providing accurate predictions.
+            </p>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">The Privacy Challenge in Health Predictions</h2>
+                    <p>
+                        Traditional machine learning services require access to your raw data to make predictions. This creates privacy concerns:
+                    </p>
+                    <ul class="mb-4">
+                        <li>Your sensitive health information is exposed to the service provider</li>
+                        <li>Data breaches could expose your personal health information</li>
+                        <li>Your data might be used for purposes beyond what you consented to</li>
+                        <li>Regulatory compliance (like HIPAA) becomes more complex</li>
+                    </ul>
+                    <div class="alert alert-danger">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5 class="alert-heading">Traditional Approach: Your Data is Exposed</h5>
+                                <p class="mb-0">
+                                    In traditional cloud-based health prediction services, your unencrypted health data is sent to the server, processed in plaintext, and then results are returned to you. At multiple points, your sensitive information is exposed.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">What is Fully Homomorphic Encryption (FHE)?</h2>
+                    <p>
+                        Fully Homomorphic Encryption (FHE) is a revolutionary encryption technology that allows computations to be performed directly on encrypted data without ever decrypting it.
+                    </p>
+                    
+                    <div class="row align-items-center mb-4">
+                        <div class="col-md-6">
+                            <h5>Key Features of FHE:</h5>
+                            <ul>
+                                <li><strong>Encrypted Computation:</strong> Perform calculations on encrypted data without decryption</li>
+                                <li><strong>End-to-End Encryption:</strong> Data remains encrypted throughout the entire process</li>
+                                <li><strong>Mathematical Guarantee:</strong> Privacy is protected by mathematical properties, not just policies</li>
+                                <li><strong>Zero Knowledge:</strong> The server learns nothing about your data</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title">FHE Analogy: The Locked Box</h5>
+                                    <p>
+                                        Imagine placing your health data in a special locked box. You keep the only key. The box has magical properties that allow others to perform calculations on what's inside without ever opening the box or seeing its contents. When the calculations are complete, only you can unlock the box to see the results.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="fas fa-shield-alt fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5 class="alert-heading">FHE Approach: Your Data Stays Private</h5>
+                                <p class="mb-0">
+                                    With FHE, your health data is encrypted on your device before being sent to the server. The server performs all calculations on the encrypted data and returns encrypted results. Only you can decrypt these results. The server never sees your actual health information.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">How Our FHE Health Prediction Works</h2>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="card bg-light mb-4">
+                                <div class="card-body">
+                                    <h5 class="text-center mb-4">The FHE Health Prediction Process</h5>
+                                    <div class="row text-center">
+                                        <div class="col">
+                                            <div class="p-3 rounded bg-white shadow-sm mb-2">
+                                                <i class="fas fa-user-lock fa-2x text-primary mb-2"></i>
+                                                <h6>Step 1: Encryption</h6>
+                                            </div>
+                                            <p class="small">Your health data is encrypted on your device using your unique encryption key</p>
+                                        </div>
+                                        <div class="col-auto d-flex align-items-center">
+                                            <i class="fas fa-arrow-right text-muted"></i>
+                                        </div>
+                                        <div class="col">
+                                            <div class="p-3 rounded bg-white shadow-sm mb-2">
+                                                <i class="fas fa-server fa-2x text-primary mb-2"></i>
+                                                <h6>Step 2: Encrypted Processing</h6>
+                                            </div>
+                                            <p class="small">The server processes your encrypted data using FHE techniques</p>
+                                        </div>
+                                        <div class="col-auto d-flex align-items-center">
+                                            <i class="fas fa-arrow-right text-muted"></i>
+                                        </div>
+                                        <div class="col">
+                                            <div class="p-3 rounded bg-white shadow-sm mb-2">
+                                                <i class="fas fa-lock-open fa-2x text-primary mb-2"></i>
+                                                <h6>Step 3: Decryption</h6>
+                                            </div>
+                                            <p class="small">Encrypted results are sent back and decrypted only on your device</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mb-3">Technical Details</h5>
+                    <p>
+                        Our implementation uses the CKKS (Cheon-Kim-Kim-Song) encryption scheme, which is specifically designed for approximate arithmetic on encrypted real numbers. This makes it ideal for machine learning applications.
+                    </p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0">Client-Side Operations</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ol>
+                                        <li>Generate encryption keys (public and private)</li>
+                                        <li>Encrypt health metrics using the public key</li>
+                                        <li>Send only the encrypted data to the server</li>
+                                        <li>Receive encrypted prediction results</li>
+                                        <li>Decrypt results using the private key</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0">Server-Side Operations</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ol>
+                                        <li>Receive encrypted health data</li>
+                                        <li>Process data through an FHE-compatible machine learning model</li>
+                                        <li>Perform all calculations on encrypted data</li>
+                                        <li>Generate encrypted prediction results</li>
+                                        <li>Return encrypted results to the client</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h5 class="alert-heading"><i class="fas fa-info-circle me-2"></i>Important Privacy Guarantee</h5>
+                        <p class="mb-0">
+                            At no point during this process does the server have access to your unencrypted health data or the means to decrypt it. The mathematical properties of FHE ensure that even the operators of the service cannot access your private information.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Benefits of FHE for Health Predictions</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-user-shield"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5>Enhanced Privacy</h5>
+                                    <p>Your sensitive health data remains private at all times, even during processing.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-balance-scale"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5>Regulatory Compliance</h5>
+                                    <p>Helps meet HIPAA and other privacy regulations by never exposing sensitive data.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5>Breach Protection</h5>
+                                    <p>Even if the server is compromised, your health data remains encrypted and secure.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-handshake"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5>Trust Minimization</h5>
+                                    <p>You don't need to trust the service provider with your data—the encryption guarantees privacy.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Limitations and Considerations</h2>
+                    
+                    <p>
+                        While FHE provides powerful privacy guarantees, it's important to understand its current limitations:
+                    </p>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-tachometer-alt me-2 text-warning"></i>Performance Impact</h5>
+                                    <p class="card-text">
+                                        FHE operations are computationally intensive and can be slower than plaintext calculations. Our implementation is optimized for health predictions, but you may notice slightly longer processing times compared to non-private alternatives.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-cogs me-2 text-warning"></i>Model Complexity</h5>
+                                    <p class="card-text">
+                                        Not all machine learning models can be efficiently implemented with FHE. We've carefully designed our health prediction model to work well with FHE while maintaining high accuracy.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Learn More About FHE</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <h5><i class="fas fa-book me-2"></i>Educational Resources</h5>
+                            <ul>
+                                <li><a href="https://www.microsoft.com/en-us/research/project/homomorphic-encryption/" target="_blank">Microsoft Research: Homomorphic Encryption</a></li>
+                                <li><a href="https://www.ibm.com/blogs/research/2020/06/ibm-releases-fully-homomorphic-encryption-toolkit-for-macos-and-ios-linux-and-android-coming-soon/" target="_blank">IBM Research: FHE Toolkit</a></li>
+                                <li><a href="https://www.youtube.com/watch?v=pVCkTUaciKE" target="_blank">Video: Homomorphic Encryption Explained</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h5><i class="fas fa-code me-2"></i>Technical Resources</h5>
+                            <ul>
+                                <li><a href="https://github.com/microsoft/SEAL" target="_blank">Microsoft SEAL (FHE Library)</a></li>
+                                <li><a href="https://github.com/OpenMined/PySyft" target="_blank">OpenMined PySyft (Privacy-Preserving ML)</a></li>
+                                <li><a href="https://homomorphicencryption.org/" target="_blank">Homomorphic Encryption Standardization</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="/" class="btn btn-primary btn-lg">
+                            <i class="fas fa-arrow-left me-2"></i>Return to Health Prediction
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

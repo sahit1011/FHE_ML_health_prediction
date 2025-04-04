@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Assessment Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #6610f2;
+            padding-bottom: 10px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #6610f2;
+        }
+        .report-date {
+            color: #666;
+            font-style: italic;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-left: 4px solid #6610f2;
+            margin-bottom: 15px;
+        }
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .metrics-table th, .metrics-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .metrics-table th {
+            background-color: #f2f2f2;
+        }
+        .metrics-row:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .prediction-result {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .low-risk {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .high-risk {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .recommendation {
+            background-color: #f8f9fa;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .recommendation-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .recommendation-actions {
+            margin-left: 20px;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        .fhe-info {
+            background-color: #e2e3e5;
+            border: 1px solid #d6d8db;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">Secure Health Prediction</div>
+        <div class="report-date">Health Assessment Report - {{ date }}</div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Health Metrics Summary</h2>
+        <table class="metrics-table">
+            <tr>
+                <th colspan="2">Basic Metrics</th>
+                <th colspan="2">Blood Pressure</th>
+                <th colspan="4">Blood Tests</th>
+            </tr>
+            <tr class="metrics-row">
+                <td><strong>Age:</strong> {{ results.input_data.age }} years</td>
+                <td><strong>BMI:</strong> {{ results.input_data.bmi }} kg/m²</td>
+                <td><strong>Systolic:</strong> {{ results.input_data.systolic_bp }} mmHg</td>
+                <td><strong>Diastolic:</strong> {{ results.input_data.diastolic_bp }} mmHg</td>
+                <td><strong>Blood Sugar:</strong> {{ results.input_data.blood_sugar }} mg/dL</td>
+                <td><strong>Total Cholesterol:</strong> {{ results.input_data.total_cholesterol }} mg/dL</td>
+                <td><strong>HDL:</strong> {{ results.input_data.hdl_cholesterol }} mg/dL</td>
+                <td><strong>LDL:</strong> {{ results.input_data.ldl_cholesterol }} mg/dL</td>
+            </tr>
+            <tr>
+                <th colspan="8">Risk Factors</th>
+            </tr>
+            <tr class="metrics-row">
+                <td colspan="4"><strong>Smoking:</strong> {% if results.input_data.smoking == 1 %}Yes{% else %}No{% endif %}</td>
+                <td colspan="4"><strong>Family History of Heart Disease:</strong> {% if results.input_data.family_history == 1 %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Risk Assessment</h2>
+        
+        {% if results.plaintext.prediction == 0 %}
+        <div class="prediction-result low-risk">
+            <p>Based on your health metrics, you have a <strong>LOW RISK</strong> of heart disease.</p>
+            <p>Risk Probability: {{ (results.plaintext.probabilities[1] * 100) | round(1) }}%</p>
+        </div>
+        {% else %}
+        <div class="prediction-result high-risk">
+            <p>Based on your health metrics, you have a <strong>HIGH RISK</strong> of heart disease.</p>
+            <p>Risk Probability: {{ (results.plaintext.probabilities[1] * 100) | round(1) }}%</p>
+        </div>
+        {% endif %}
+        
+        <p>This assessment is based on the analysis of your provided health metrics using a machine learning model trained on health data. It should be used for informational purposes only and is not a substitute for professional medical advice.</p>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Personalized Recommendations</h2>
+        
+        <!-- BMI recommendations -->
+        {% if results.input_data.bmi >= 30 %}
+        <div class="recommendation">
+            <div class="recommendation-title">Reduce BMI to a Healthier Range</div>
+            <p>Your BMI indicates obesity, which increases risk for heart disease, diabetes, and other conditions.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Aim to lose weight gradually (1-2 pounds per week)</li>
+                    <li>Increase physical activity to at least 150 minutes per week</li>
+                    <li>Focus on a balanced diet rich in fruits, vegetables, and lean proteins</li>
+                    <li>Consider consulting with a dietitian for a personalized meal plan</li>
+                </ul>
+            </div>
+        </div>
+        {% elif results.input_data.bmi >= 25 %}
+        <div class="recommendation">
+            <div class="recommendation-title">Work Toward a Healthier Weight</div>
+            <p>Your BMI indicates you are overweight, which can increase health risks.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Aim for 30 minutes of moderate exercise most days</li>
+                    <li>Focus on portion control and mindful eating</li>
+                    <li>Reduce intake of processed foods and added sugars</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Blood pressure recommendations -->
+        {% if results.input_data.systolic_bp >= 140 or results.input_data.diastolic_bp >= 90 %}
+        <div class="recommendation">
+            <div class="recommendation-title">Lower Your Blood Pressure</div>
+            <p>Your blood pressure is in the hypertension range, which increases risk for heart disease and stroke.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Reduce sodium intake to less than 2,300mg per day</li>
+                    <li>Increase physical activity</li>
+                    <li>Maintain a healthy weight</li>
+                    <li>Limit alcohol consumption</li>
+                    <li>Consider the DASH diet (Dietary Approaches to Stop Hypertension)</li>
+                    <li>Consult with your doctor about medication options</li>
+                </ul>
+            </div>
+        </div>
+        {% elif results.input_data.systolic_bp >= 120 or results.input_data.diastolic_bp >= 80 %}
+        <div class="recommendation">
+            <div class="recommendation-title">Monitor Your Blood Pressure</div>
+            <p>Your blood pressure is elevated, which may lead to hypertension if not addressed.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Reduce sodium intake</li>
+                    <li>Exercise regularly</li>
+                    <li>Manage stress through meditation or other relaxation techniques</li>
+                    <li>Monitor your blood pressure regularly</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Blood sugar recommendations -->
+        {% if results.input_data.blood_sugar >= 126 %}
+        <div class="recommendation">
+            <div class="recommendation-title">Manage Your Blood Sugar</div>
+            <p>Your blood sugar is in the diabetes range, which requires careful management.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Consult with your doctor for proper diagnosis and treatment</li>
+                    <li>Monitor your blood sugar regularly</li>
+                    <li>Follow a balanced diet low in simple carbohydrates</li>
+                    <li>Engage in regular physical activity</li>
+                    <li>Take medications as prescribed</li>
+                </ul>
+            </div>
+        </div>
+        {% elif results.input_data.blood_sugar >= 100 %}
+        <div class="recommendation">
+            <div class="recommendation-title">Improve Blood Sugar Control</div>
+            <p>Your blood sugar is in the prediabetes range, which increases risk for developing diabetes.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Reduce intake of refined carbohydrates and added sugars</li>
+                    <li>Increase fiber intake</li>
+                    <li>Aim for 150 minutes of moderate exercise per week</li>
+                    <li>Lose 5-7% of body weight if overweight</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Cholesterol recommendations -->
+        {% if results.input_data.total_cholesterol >= 240 or results.input_data.ldl_cholesterol >= 160 or results.input_data.hdl_cholesterol < 40 %}
+        <div class="recommendation">
+            <div class="recommendation-title">Improve Your Cholesterol Profile</div>
+            <p>Your cholesterol levels indicate increased risk for heart disease and stroke.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Reduce saturated and trans fats in your diet</li>
+                    <li>Increase intake of omega-3 fatty acids (fish, walnuts, flaxseeds)</li>
+                    <li>Increase soluble fiber (oats, beans, fruits)</li>
+                    <li>Exercise regularly</li>
+                    <li>Consider plant sterols/stanols</li>
+                    <li>Consult with your doctor about medication options</li>
+                </ul>
+            </div>
+        </div>
+        {% elif results.input_data.total_cholesterol >= 200 or results.input_data.ldl_cholesterol >= 130 or results.input_data.hdl_cholesterol < 60 %}
+        <div class="recommendation">
+            <div class="recommendation-title">Monitor Your Cholesterol</div>
+            <p>Your cholesterol levels are borderline and should be monitored.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Limit saturated fats</li>
+                    <li>Increase physical activity</li>
+                    <li>Include heart-healthy foods like nuts, avocados, and olive oil</li>
+                    <li>Get regular cholesterol screenings</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Smoking recommendations -->
+        {% if results.input_data.smoking == 1 %}
+        <div class="recommendation">
+            <div class="recommendation-title">Quit Smoking</div>
+            <p>Smoking significantly increases your risk for heart disease, stroke, cancer, and many other health problems.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Talk to your doctor about smoking cessation programs</li>
+                    <li>Consider nicotine replacement therapy or medications</li>
+                    <li>Join a support group</li>
+                    <li>Avoid triggers and find healthy alternatives to manage cravings</li>
+                    <li>Set a quit date and stick to it</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Family history recommendations -->
+        {% if results.input_data.family_history == 1 %}
+        <div class="recommendation">
+            <div class="recommendation-title">Address Family History Risk</div>
+            <p>Your family history of heart disease increases your risk, but you can take steps to mitigate it.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Get regular check-ups and screenings</li>
+                    <li>Be vigilant about managing all other risk factors</li>
+                    <li>Discuss your family history with your doctor</li>
+                    <li>Consider genetic counseling if recommended</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- General recommendations for everyone -->
+        <div class="recommendation">
+            <div class="recommendation-title">Maintain a Heart-Healthy Lifestyle</div>
+            <p>These general recommendations can help everyone maintain better cardiovascular health.</p>
+            <div class="recommendation-actions">
+                <ul>
+                    <li>Eat a diet rich in fruits, vegetables, whole grains, and lean proteins</li>
+                    <li>Aim for at least 150 minutes of moderate exercise per week</li>
+                    <li>Manage stress through mindfulness, meditation, or other techniques</li>
+                    <li>Get 7-9 hours of quality sleep each night</li>
+                    <li>Stay hydrated by drinking plenty of water</li>
+                    <li>Limit alcohol consumption</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="fhe-info">
+        <h3>About Fully Homomorphic Encryption (FHE)</h3>
+        <p>This health assessment was processed using Fully Homomorphic Encryption (FHE) technology, which allows computations to be performed on encrypted data without ever decrypting it. This means your sensitive health information remains private and secure throughout the entire prediction process.</p>
+        
+        {% if 'fhe' in results and results.fhe %}
+        <p><strong>FHE Performance Metrics:</strong></p>
+        <ul>
+            <li>Encryption Time: {{ results.fhe.encryption_time }} seconds</li>
+            <li>Inference Time: {{ results.fhe.inference_time }} seconds</li>
+            <li>Decryption Time: {{ results.fhe.decryption_time }} seconds</li>
+            <li>Total Processing Time: {{ results.fhe.total_time }} seconds</li>
+        </ul>
+        {% endif %}
+    </div>
+
+    <div class="footer">
+        <p>This report is for informational purposes only and does not constitute medical advice. Please consult with a healthcare professional for personalized medical guidance.</p>
+        <p>© {{ date.split(' ')[2] }} Secure Health Prediction. All rights reserved.</p>
+    </div>
+</body>
+</html>

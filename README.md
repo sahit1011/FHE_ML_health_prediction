@@ -3,6 +3,7 @@
 ![FHE Health Prediction](static/images/fhe_health_prediction.png)
 
 A privacy-preserving health risk prediction system using Fully Homomorphic Encryption (FHE) and Machine Learning.
+This project uses TFHE (Torus Fully Homomorphic Encryption) through the Concrete-ML library to enable privacy-preserving health predictions. This encryption scheme allows the server to perform computations on encrypted data without ever seeing the actual values, providing strong privacy guarantees for sensitive health information.
 
 ## Project Overview
 

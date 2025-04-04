@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from flask_bootstrap import Bootstrap
 import numpy as np
 import os
 import time
+import json
+from datetime import datetime
 
 # Import our client and server classes
 from src.fhe_client import FHEClient
@@ -201,5 +203,39 @@ def predict():
     except Exception as e:
         return render_template('error.html', error=str(e))
 
+@app.route('/fhe-privacy')
+def fhe_privacy():
+    """Render the FHE privacy explanation page."""
+    return render_template('fhe_privacy.html')
+
+@app.route('/view_report', methods=['POST'])
+def view_report():
+    """Generate and download a PDF report of the health assessment."""
+    try:
+        # Get the results data from the form
+        results_data = request.form.get('results_data')
+        if not results_data:
+            return render_template('error.html', error="No results data provided.")
+
+        # Parse the JSON data
+        results = json.loads(results_data)
+
+        # Create a temporary HTML file for the report
+        report_html = render_template('report_template.html', results=results, date=datetime.now().strftime("%B %d, %Y"))
+
+        # For now, let's return the HTML directly instead of generating a PDF
+        # This will allow us to see the report and debug any issues
+        response = make_response(report_html)
+        response.headers['Content-Type'] = 'text/html'
+        response.headers['Content-Disposition'] = 'inline; filename=health_assessment_report.html'
+
+        # We're returning HTML directly for now
+        # In the future, we can implement PDF generation
+
+        return response
+
+    except Exception as e:
+        return render_template('error.html', error=str(e))
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
